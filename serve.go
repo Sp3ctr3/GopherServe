@@ -1,6 +1,7 @@
 package main
 
 import (
+    "encoding/json"
     "fmt"
     "io"
     "net/http"
@@ -13,6 +14,21 @@ func check(e error){
     }
 }
 
+type config struct{
+    port string
+}
+
+func configuration(){
+    file,err := ioutil.ReadFile("./config.json")
+    var jsontype config
+    fmt.Println(string(file))
+    json.Unmarshal(file, &jsontype)
+    if err != nil{
+        fmt.Println("Error parsing configuration file: ",err)
+    }else {
+        fmt.Println("Configuration:"+jsontype.port)
+    }
+}
 
 func pagehandler(w http.ResponseWriter, r *http.Request){
     fmt.Println(r.RequestURI)
@@ -47,5 +63,6 @@ func pagehandler(w http.ResponseWriter, r *http.Request){
 func main(){
     fmt.Println("Running server")
     http.HandleFunc("/",pagehandler)
+    configuration()
     http.ListenAndServe(":8000",nil)
 }
