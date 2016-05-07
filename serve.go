@@ -30,6 +30,12 @@ func configuration(){
     }
 }
 
+func logger(s string){
+    d1 := []byte(s+"\n")
+    err := ioutil.WriteFile("/tmp/log", d1, 0644)
+    check(err)
+}
+
 func pagehandler(w http.ResponseWriter, r *http.Request){
     fmt.Println(r.RequestURI)
     if r.RequestURI == "/" {
@@ -63,6 +69,7 @@ func pagehandler(w http.ResponseWriter, r *http.Request){
 func main(){
     fmt.Println("Running server")
     http.HandleFunc("/",pagehandler)
-    configuration()
+    // Need to figure out JSON formatting properly
+    // configuration()
     http.ListenAndServe(":8000",nil)
 }
